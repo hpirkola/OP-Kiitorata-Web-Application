@@ -56,7 +56,7 @@ npm install
 
 ## Deployment
 
-&nbsp;&nbsp;&nbsp;&nbsp;Build and deploy with the following command:
+&nbsp;Build and deploy with the following command:
 ```
 npm run deploy
 ```
@@ -64,7 +64,7 @@ npm run deploy
 
 ## Clean Up
 
-&nbsp;&nbsp;&nbsp;&nbsp;Remove all AWS resources with the following command:
+&nbsp;Remove all AWS resources with the following command:
 ```
 npm run destroy
 ```

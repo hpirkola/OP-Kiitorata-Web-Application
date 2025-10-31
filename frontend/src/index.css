@@ -1,0 +1,26 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: #11111b;
+  color: white;
+}
+
+button {
+  background-color: #b4befe;
+  border-radius: 8px;
+  padding: 5px;
+  font-family: system-ui;
+  font-weight: 1000;
+  color: #181825;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: #cba6f7;
+  border-color: #cba6f7;
+}
+
+h1 {
+  font-family: Avenir;
+  font-size: 60px;
+}
+

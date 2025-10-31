@@ -18,7 +18,7 @@
 ```
 aws configure
 ```
-Enter:
+&nbsp;&nbsp;&nbsp;&nbsp;Enter:
 * AWS Access Key
 * AWS Secret Key
 * Default region (e.g., eu-north-1)
@@ -33,7 +33,7 @@ npm install -g aws-cdk
 
 3. Install Docker
 
-Download Docker Desktop [HERE](https://www.docker.com/products/docker-desktop/)
+&nbsp;&nbsp;&nbsp;&nbsp;Download Docker Desktop [HERE](https://www.docker.com/products/docker-desktop/)
 
 <br>  
 
@@ -43,7 +43,7 @@ Download Docker Desktop [HERE](https://www.docker.com/products/docker-desktop/)
 cd cdk
 cdk bootstrap
 ```
-This creates an S3 bucket and ECR repo used by CDK to store assets (Docker images, code packages, etc.)
+&nbsp;&nbsp;&nbsp;&nbsp;This creates an S3 bucket and ECR repo used by CDK to store assets (Docker images, code packages, etc.)
 
 <br>
   
@@ -54,9 +54,9 @@ npm install
 ```
 <br>
 
-### Deployment
+## Deployment
 
-Build and deploy with the following command:
+&nbsp;&nbsp;&nbsp;&nbsp;Build and deploy with the following command:
 ```
 npm run deploy
 ```
@@ -64,7 +64,7 @@ npm run deploy
 
 ## Clean Up
 
-Remove all AWS resources with the following command:
+&nbsp;&nbsp;&nbsp;&nbsp;Remove all AWS resources with the following command:
 ```
 npm run destroy
 ```

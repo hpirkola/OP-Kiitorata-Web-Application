@@ -6,7 +6,6 @@ COPY tsconfig.json ./
 COPY src ./src
 RUN npx tsc
 
-# force again
 FROM public.ecr.aws/lambda/nodejs:20 AS lambda
 WORKDIR /var/task
 COPY --from=build /app/node_modules ./node_modules

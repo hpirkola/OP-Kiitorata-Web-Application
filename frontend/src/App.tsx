@@ -35,7 +35,7 @@ function App() {
             <img src={img} alt="random dog" className="dog" />
           )}
           {error && (
-            <p>${error}</p>
+            <p>{error}</p>
           )}
         </div>
       </div>

@@ -26,12 +26,19 @@ export class MySiteStack extends cdk.Stack {
 
     const backendFn = new lambda.DockerImageFunction(this, "BackendFn", {
       code: lambda.DockerImageCode.fromImageAsset(
-        path.join(__dirname, "../../backend"),
+        path.join(__dirname, "../../"),
         { 
-          file: "Dockerfile",
+          file: "backend/Dockerfile",
           platform: ecrassets.Platform.LINUX_AMD64, 
-          cmd: ["dist/handler.handler"],
-          entrypoint: ["/lambda-entrypoint.sh"],
+          cmd: ["dist/src/handler.handler"],
+          //entrypoint: [],
+          exclude: [
+            "cdk",
+            "cdk.out",
+            "frontend",
+            "**/cdk.out",
+            "**/.git",
+    ],
         }
       ),
       architecture: lambda.Architecture.X86_64,

@@ -1,26 +1,30 @@
 import './App.css'
 import { useState } from 'react';
+import type { DogResponse, ErrorResponse } from '../../shared/apiTypes'
 
 function App() {
-  const [img, setImg] = useState("");
-  const [error, setError] = useState("");
+  const [img, setImg] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
-  async function getDog() {
-    try {
-      setError("");
-      setImg("");
+  async function fetchDog(): Promise<DogResponse> {
 
-      const result = await fetch("/api/dog");
-      if (result.ok) {
-        const data = await result.json();
-        setImg(data.imageUrl);
-      }
-      else {
-        setError(("Fetching failed, please try again."));
-      }
-    } catch (err) {
+    const result = await fetch("/api/dog/image");
+    if (!result.ok) {
+      const err: ErrorResponse = await result.json();
       setError("Fetching failed, please try again.");
-      console.log(err);
+      throw new Error(err.error);
+    }
+    return result.json() as Promise<DogResponse>;
+  }
+
+  const getDog = async (): Promise<void> => {
+    setImg("");
+    setError("");
+    try {
+      const data = await fetchDog();
+      setImg(data.imageUrl);
+    } catch (err: unknown) {
+      console.log("Fetching failed, please try again.");
     }
   }
   return (

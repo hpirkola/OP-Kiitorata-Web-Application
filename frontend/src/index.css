@@ -20,7 +20,9 @@ button:hover {
 }
 
 h1 {
-  font-family: Avenir;
-  font-size: 60px;
+  font-family: Avenir, system-ui, sans-serif;
+  font-size: clamp(1.6rem, 5vw, 3.75rem);
+  margin: 0 0 0.5em;
+  text-align: center;
 }
 

@@ -15,11 +15,13 @@ export class MySiteStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+  const policy = this.node.tryGetContext("removalPolicy") === "destroy" ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN;
+
     const siteBucket = new s3.Bucket(this, "FrontendBucket", {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
+      removalPolicy: policy,
+      autoDeleteObjects: policy === cdk.RemovalPolicy.DESTROY,
     });
 
     const s3Origin = origins.S3BucketOrigin.withOriginAccessControl(siteBucket);
@@ -43,6 +45,7 @@ export class MySiteStack extends cdk.Stack {
       ),
       architecture: lambda.Architecture.X86_64,
       logRetention: logs.RetentionDays.ONE_WEEK,
+      timeout: cdk.Duration.seconds(5),
     });
 
     const api = new apigwv2.HttpApi(this, "HttpApi");

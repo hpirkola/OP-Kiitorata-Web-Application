@@ -5,13 +5,14 @@ import type { DogResponse, ErrorResponse } from '../../shared/apiTypes'
 function App() {
   const [img, setImg] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function fetchDog(): Promise<DogResponse> {
 
-    const result = await fetch("/api/dog/image");
+    const endpoint = import.meta.env.VITE_DOG_ENDPOINT;
+    const result = await fetch(endpoint);
     if (!result.ok) {
       const err: ErrorResponse = await result.json();
-      setError("Fetching failed, please try again.");
       throw new Error(err.error);
     }
     return result.json() as Promise<DogResponse>;
@@ -20,10 +21,13 @@ function App() {
   const getDog = async (): Promise<void> => {
     setImg("");
     setError("");
+    setLoading(true);
     try {
       const data = await fetchDog();
       setImg(data.imageUrl);
     } catch (err: unknown) {
+      setError("Fetching failed, please try again.");
+      setLoading(false);
       console.log("Fetching failed, please try again.");
     }
   }
@@ -35,8 +39,11 @@ function App() {
           <div>Get the picture</div>
         </button>
         <div className='pic'>
+          {loading && (
+            <div className="spinner" role="status" aria-label="Loading image…" />
+          )}
           {img && (
-            <img src={img} alt="random dog" className="dog" />
+            <img src={img} alt="random dog" className="dog" onLoad={() => setLoading(false)} onError={() => { setLoading(false); setError("Image failed to load, please try again.")}} />
           )}
           {error && (
             <p>{error}</p>

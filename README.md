@@ -93,7 +93,7 @@ npm install -g aws-cdk
 
 ### 6. Install Docker
 
-&nbsp;&nbsp;&nbsp;&nbsp;Download Docker Desktop [HERE](https://www.docker.com/products/docker-desktop/)
+Download Docker Desktop [HERE](https://www.docker.com/products/docker-desktop/)
 
 <br>  
 
@@ -118,7 +118,7 @@ npm install
 
 ## Deployment
 
-&nbsp;Build and deploy with **one** of the following commands:
+Build and deploy with **one** of the following commands:
 ```
 npm run deploy
 ```
@@ -133,7 +133,14 @@ Uses **DESTROY** as the removal policy
 
 ## Clean Up
 
-&nbsp;Remove all AWS resources with the following command:
+Remove all AWS resources with the following command:
 ```
 npm run destroy
 ```
+
+## Non idealities / things to improve
+
+* Using a proper logger instead of console.log
+* Using more environment variables and having the possibility to change them
+* Handling image caching and preloading
+* Adding tests

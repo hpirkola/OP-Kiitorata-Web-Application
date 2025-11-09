@@ -112,7 +112,7 @@ This creates the CDK bootstrap stack which provides:
 ### 8. Install project dependencies
 
 ```
-npm install
+npm ci
 ```
 <br>
 
@@ -133,6 +133,10 @@ Uses **DESTROY** as the removal policy
 
 ## Clean Up
 
+If you deployed with **npm run deploy:destroy-mode**, you need to empty the bucket before destroying
+```
+aws s3 rm s3://<bucket-name> --recursive
+```
 Remove all AWS resources with the following command:
 ```
 npm run destroy

@@ -12,42 +12,104 @@
     *  ECR & Docker (for Lambda image)
 <br>
 
+## Requirements
+
+- Node.js 20.x (LTS, AWS Lambda compatible)
+- Docker (required for building the Lambda image)
+- AWS CLI (configured with credentials for deployment)
+- AWS CDK v2
+<br>
+
 ## Initial Setup
 
-1. Install AWS CLI and log in to your AWS account
+### 1. Install AWS CLI
+
+* Mac OS (Homebrew)
+```
+brew install awscli
+```
+* Windows
+   * Download installer: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+* Linux
+```
+sudo apt-get update && sudo apt-get install awscli
+```
+
+Verify installation:
+```
+aws --version
+```
+
+### 2. Create an IAM User for Deployment
+
+Create an AWS account and then follow these steps:
+* Go to AWS Console → IAM
+* Click Users → Create user
+* Name it: cdk-deploy (or any name)
+* Permissions:
+   * ✅ Attach existing policies
+* After creating, go to Security credentials
+* Click Create access key
+* Choose Command Line Interface (CLI)
+* Download the .csv file or copy the keys
+
+Now you have:
+* AWS Access Key ID
+* AWS Secret Access Key
+
+### 3. Configure AWS locally
+
 ```
 aws configure
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;Enter:
 * AWS Access Key
 * AWS Secret Key
-* Default region (e.g., eu-north-1)
-* Output format (json)
+* Default region: eu-north-1 (or any region you want to deploy in)
+* Output format: json
 <br>
 
-2. Install AWS CDK
+### 4. Verify Authentication
+
+```
+aws sts get-caller-identity
+```
+If everything was set up correctly, you should see something like this:
+
+```
+{
+    "UserId": "ABCDEFGHIJKLMNOPQRSTU",
+    "Account": "1234567890",
+    "Arn": "arn:aws:iam::12345678:user/<name>"
+}
+```
+
+### 5. Install AWS CDK
 ```
 npm install -g aws-cdk
 ```
 <br>
 
-3. Install Docker
+### 6. Install Docker
 
 &nbsp;&nbsp;&nbsp;&nbsp;Download Docker Desktop [HERE](https://www.docker.com/products/docker-desktop/)
 
 <br>  
 
-4. Bootsrap CDK (first-time only)
+### 7. Bootstrap CDK (first-time only)
 
 ```
 cd cdk
 cdk bootstrap
 ```
-&nbsp;&nbsp;&nbsp;&nbsp;This creates an S3 bucket and ECR repo used by CDK to store assets (Docker images, code packages, etc.)
+This creates the CDK bootstrap stack which provides:
+   * Storage for Lambda/Docker assets
+   * Deployment IAM roles
 
 <br>
   
-5. Install project dependencies
+### 8. Install project dependencies
 
 ```
 npm install
@@ -56,10 +118,17 @@ npm install
 
 ## Deployment
 
-&nbsp;Build and deploy with the following command:
+&nbsp;Build and deploy with **one** of the following commands:
 ```
 npm run deploy
 ```
+Uses **RETAIN** as the removal policy  
+  → The S3 bucket and data will **not** be deleted during `cdk destroy`.  
+```
+npm run deploy:destroy-mode
+```
+Uses **DESTROY** as the removal policy  
+  → The S3 bucket will be **emptied and deleted automatically** during `cdk destroy`.
 <br>
 
 ## Clean Up

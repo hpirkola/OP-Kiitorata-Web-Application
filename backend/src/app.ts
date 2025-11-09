@@ -4,12 +4,19 @@ import type { HealthResponse, DogResponse, ErrorResponse } from "@shared/apiType
 const app = express();
 app.use(express.json());
 
+/*****************************************************************************************
+* Liveness probe for monitoring, kept intentionally even though not yet wired for checks *
+*****************************************************************************************/
 app.get("/api/health", (_req: Request, res: ExpressResponse<HealthResponse>) => {
 	res.json({ status: "ok" });
 });
 
 type DogCeoResponse = { message: string; status: "success" };
 
+/********************************************************************
+* Performs a fetch request with a timeout using AbortController.    *
+* Throws an error if the external request does not respond in time. *
+********************************************************************/
 async function fetchWithTimeout(url: string, ms: number): Promise<globalThis.Response> {
 	const controller = new AbortController();
 	const timeout = setTimeout(() => controller.abort(), ms);
@@ -17,12 +24,15 @@ async function fetchWithTimeout(url: string, ms: number): Promise<globalThis.Res
 		const res = await fetch(url, { signal: controller.signal });
 		clearTimeout(timeout);
 		return res;
-	} catch (err) {
+	} catch (err: any) {
 		clearTimeout(timeout);
 		throw new Error("External API request timed out");
 	}
 };
 
+/******************************************************************
+* Retries a fetch request a limited number of times with a delay. *
+******************************************************************/
 async function fetchWithRetry(url: string, attempts = 2): Promise<globalThis.Response> {
 	for (let i = 0; i < attempts; i++) {
 		try {
@@ -38,6 +48,10 @@ async function fetchWithRetry(url: string, attempts = 2): Promise<globalThis.Res
 	throw new Error("Unexpected unreachable code");
 }
 
+/***************************************************
+* Returns a random dog image from dog.ceo.         *
+* Validates the response and checks URL formatting *
+***************************************************/
 app.get("/api/dog/image", async (_req: Request, res: ExpressResponse<DogResponse | ErrorResponse>) => {
     try {
 		const result = await fetchWithRetry("https://dog.ceo/api/breeds/image/random");

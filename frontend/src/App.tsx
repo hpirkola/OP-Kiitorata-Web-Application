@@ -2,6 +2,10 @@ import './App.css'
 import { useState } from 'react';
 import type { DogResponse, ErrorResponse } from '../../shared/apiTypes'
 
+/************************************************************************
+* Simple React UI that fetches and displays a random dog image.         *
+* Handles loading state, errors, and displays the image when available. *
+************************************************************************/
 function App() {
   const [img, setImg] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -9,8 +13,12 @@ function App() {
 
   async function fetchDog(): Promise<DogResponse> {
 
-    const endpoint = import.meta.env.VITE_DOG_ENDPOINT;
-    const result = await fetch(endpoint);
+    const endpoint = "/api/dog/image";
+
+    const result = await fetch(endpoint).catch(() => {
+      throw new Error("Network error while contacting the Dog API.");
+    });
+
     if (!result.ok) {
       const err: ErrorResponse = await result.json();
       throw new Error(err.error);
@@ -25,8 +33,8 @@ function App() {
     try {
       const data = await fetchDog();
       setImg(data.imageUrl);
-    } catch (err: unknown) {
-      setError("Fetching failed, please try again.");
+    } catch (err: any) {
+      setError(err.message || "Fetching failed, please try again.");
       setLoading(false);
       console.log("Fetching failed, please try again.");
     }

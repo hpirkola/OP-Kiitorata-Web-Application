@@ -28,7 +28,11 @@ export class MySiteStack extends cdk.Stack {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
       removalPolicy: policy,
-      autoDeleteObjects: policy === cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: false,
+    });
+
+    new cdk.CfnOutput(this, "BucketName", {
+      value: siteBucket.bucketName,
     });
 
     /*******************************************************
